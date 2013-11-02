@@ -268,23 +268,42 @@ hyper-parameters.
 
 \subsubsection*{Learning rate versus momentum coefficient}
 
-We begin our account with a detailed investigation of how learning
-proceeds when we vary two paramaters: the learning rate, and the
-momentum coefficient.  These results are of intrinsic interest
+The learning algorithm we will use for our all experiments is
+mini-batch stochastic gradient descent using momentum.  In our first
+set of experiments, described in this section, we investigate learning
+as a function of two hyper-parameters: the learning rate and the
+momentum coefficient.  Our experiments will lead us to conjecture
+several heuristic relationships between these two hyper-parameters.
 
-1. Learning rate versus friction:
+Later sections will present similar experiments using other pairs of
+hyper-parameters.  The next section gives a high-level overview of the
+entire sequence of experiments, and discusses why different pairs of
+hyper-parameters were chosen.  We could, of course, have begun with
+that overview.  However, since our experiments are somewhat unusual in
+the neural networks literature, it makes sense to start first with
+concrete results, since they will make the overview easier to
+understand.
 
-We'll begin with a detailed investigation of learning rate versus
-friction.  This enables us to give a concrete and detailed of results.
-It also sets the stage for a discussion of the broader question of
-which pairs of parameters should we be investigating, etc...
+Our experiments were performed using three neural net architectures: a
+net with a single hidden layer containing 20 hidden units; a net with
+a single hidden layer containing 40 hidden units; and a net with two
+hidden layers, containing 40 and 20 hidden units, respectively.
 
-presentation of
+The experiments made use of four separate activation functions: the
+sigmoid (i.e., logistic), hyperbolic tangent (tanh), rectified linear
+units (ReLU) XXX, and softplus XXX.
+
+The experiments were performed using the MNIST XXX and CIFAR-10 XXX
+training sets.  These are well-known labelled training sets used for
+image recognition.  Classification at the output of our networks was
+done using a softmax layer.  Training was performed using a negative
+log-likelihood cost function.
+
+Note that the CIFAR results were only obtained for the net
+architecture using 20 hidden units.
 
 Architecture: 20 hidden unit, 40 hidden unit, 40+20 HU.
 
-Activation functions: sigmoid, ReLU, tanh, BReLU.  (A few other
-variations: tanh+1, TReLU.)
 
 Training data: MNIST, CIFAR.
 
