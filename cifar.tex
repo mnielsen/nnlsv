@@ -143,7 +143,6 @@ heuristic rules of thumb for choosing neural network hyper-parameters.
 To convey the type of experiments we do and the results we obtain,
 consider the following graph:
 %
-
 \begin{center}
 \includegraphics[scale=0.8]{plots/example.png}
 \end{center}
@@ -274,89 +273,138 @@ hyper-parameters.
 \subsubsection*{Learning rate versus momentum coefficient}
 
 The learning algorithm we will use for our all experiments is
-mini-batch stochastic gradient descent using momentum.  In our first
-set of experiments, described in this section, we investigate learning
-as a function of two hyper-parameters: the learning rate and the
-momentum coefficient.  Our experiments will lead us to conjecture
-several heuristic relationships between these two hyper-parameters.
+mini-batch stochastic gradient descent using momentum (XXX --- cite).
+In our first set of experiments, described in this section, we
+investigate learning as a function of two hyper-parameters: the
+learning rate and the momentum coefficient.  Our experiments will lead
+us to conjecture several heuristic relationships between these two
+hyper-parameters.
 
 Later sections will present similar experiments using other pairs of
 hyper-parameters.  The next section gives a high-level overview of the
 entire sequence of experiments, and discusses why different pairs of
-hyper-parameters were chosen.  We could, of course, have begun with
-that overview.  However, since our experiments are somewhat unusual in
-the neural networks literature, it makes sense to start first with
-concrete results, since they will make the overview easier to
-understand.
+hyper-parameters were chosen for investigation.  We could, of course,
+have begun with that high-level overview.  However, since our
+experiments are somewhat unusual in the neural networks literature, it
+makes sense to start first with concrete results, since they will make
+the high-level overview easier to understand.
 
-Our experiments were performed using three neural net architectures: a
-net with a single hidden layer containing 20 hidden units; a net with
-a single hidden layer containing 40 hidden units; and a net with two
-hidden layers, containing 40 and 20 hidden units, respectively.
+Our experiments were performed using three neural network
+architectures: a net with a single hidden layer containing 20 hidden
+units; a net with a single hidden layer containing 40 hidden units;
+and a net with two hidden layers, containing 40 and 20 hidden units,
+respectively.
 
 The experiments made use of four separate activation functions: the
 sigmoid (i.e., logistic), hyperbolic tangent (tanh), rectified linear
-units (ReLU) XXX, and softplus XXX.
+units (ReLU) XXX - citations, and softplus XXX - citations.  These
+activation functions were applied throughout the network, except at
+the output, where a softmax layer was used instead.
 
 The experiments were performed using the MNIST XXX and CIFAR-10 XXX
 training sets.  These are well-known labelled training sets used for
-image recognition.  Classification at the output of our networks was
-done using a softmax layer.  Training was performed using a negative
+image recognition.  Training was performed using a negative
 log-likelihood cost function.
+
+The following graph shows the behaviour of 1,600 neural networks when
+trained on the MNIST data for six epochs. These correspond to 40
+choices of the learning rate and 40 choices of the momentum
+coefficient, for a total of 1,600 = 40 $\times$ 40 networks.  Details
+of the graph are explained below:
+%
+\includegraphics[scale=0.5]{plots/detailed/LF-20R10R-20T10-MNIST-6.png}
+%
+% XXX --- This is currently a lie, we ony have 400 = 20 x 20.
+%
+% XXX - check: what do people actually do in terms of exploring momentum?
+% Take a a look at four or five papers.
+%
+% XXX - ideally, learning rate labels should be in factors of 10.
+%
+% XXX - we want to comment on the power law.  Replot with log momentum?
+%
+% XXX - Range: 10**-4 to 1?  SOme other range?
+To generate this graph we sampled 40 different values for the momentum
+coefficient, ranging uniformly over 0.0 to 1.0.  This sampling process
+reflects the way many researchers informally explore to find suitable
+values for the momentum coefficient, often trying a number of values,
+0.0, 0.1, 0.2, 0.3, and then perhaps adjusting slightly once they've
+found a good first approximation.
+
+While we sampled uniformly for momentum, we instead sampled uniformly
+on the logarithm of the learning rate.  This reflects the way many
+researchers informally explore to find suitable values for the
+learning rate, often trying a number of values, 0.1, 0.01, 0.001, and
+so on.  A similar but more fine-grained approach is often used in
+systematic grid searches.  We use a maximum value of 1.0 XXX for the
+learning rate, since in all our MNIST experiments the nets did not
+appear to be learning anything when the learning rate was that high.
+We use a minimum value of 0.0001 XXX for the learning rate.  With
+these choices our range for the learning rate includes most values
+which have been used in prior literature.
+
+A natural question is why we vary the learning rate while holding the
+number of epochs constant.  Naively, this seems unnatural, since the
+distance traversed by the stochastic gradient descent algorithm will
+be proportional to the learning rate times the number of training
+epochs.
+
+However, in practice, with fixed computational resources, the number
+of epochs we can train for is roughly a constant.  And so the question
+that confronts someone looking to choose good hyper-parameters is how
+to choose the learning rate which gives the best results after a fixed
+number of epochs.
+
+We choose 6 epochs in part because it was computationally feasible,
+and in part because early experiments suggested that the graphs
+obtained were changing only very slowly beyond the second epoch.  The
+classification accuracies obtained after 6 epochs are comparable to
+those obtained historically.  However, it should be noted that recent
+research XXX suggests the value of going to very large numbers of
+epochs ($XXX ~ 10^3$), and using an annealing schedule for learning
+which ultimately results in very low learning rates.  We do not
+investigate these possibilities here, although they suggest natural
+questions for the future.
+
+XXX - input structure
 
 ZZZ
 
+% XXX --- The following is an alternative answer to the above question
+% We don't have the evidence to support that we're in this post-transient
+% phase (although we suspect we are for most of the parameters plotted)
+%
+% Wouldn't it make more sense to vary the number of epochs so the
+% product with the learning rate was a constant?  This argument is
+% correct during an initial transient phase in which we're trying to
+% get into the neighbourhood of a reasonable solution to the cost
+% optimization problem.  But it's no longer correct when exploring the
+% microstructure of the fitness landscape near that neighborhood.
 
-Note that the CIFAR results were only obtained for the net
-architecture using 20 hidden units.
-
-Architecture: 20 hidden unit, 40 hidden unit, 40+20 HU.
-
-
-Training data: MNIST, CIFAR.
-
-
-CIFAR:
-
-\includegraphics[scale=1.0]{plots/detailed/LF-20R10R-20T10-CIFAR-3.png}
-
-\begin{tabular}{|c|c|c|c|}
-        \hline
-        & & {\LARGE cost} & \\
-        & & (CIFAR-10) & \\
-        & & (negative log-likelihood) & \\
-        & & (20-10-softmax) & \\
-        \hline
-         & 1 epoch & 2 epoches & 3 epoches\\ \hline
-sigmoid 
-        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-1.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-2.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-3.png} \\ \hline
-tanh 
-        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-1.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-2.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-3.png} \\ \hline
-ReLU 
-        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-1.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-2.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-3.png} \\ \hline
-BReLU 
-        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-1.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-2.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-3.png} \\ \hline
-\end{tabular}
+% XXX --- Some interesting speculation here.  We haven't actually done it.
+% 
+% Why did we go for n epochs (where n is whatever it is?)  Combination
+% of two answers: (1) Here's our evidence that we're near asymptoting
+% --- to obtain this, do curve fitting to estimate what the long-run
+% cost will be, assume that the cost after 3 epochs is given by $c_1 +
+% c_2 * exp(c_3 t)$, where t is the time; (2) Computationally, that's as
+% much as we could do.  Shoot for n = 5 or 6 or so.  Note that we need
+% to validate the use of the exponential as an approximation for the
+% long-run cost.  We ignore first 3 epochs due to possible transients.
 
 
-MNIST:
 
-\includegraphics[scale=1.0]{plots/detailed/LF-20R10R-20T10-MNIST-6.png}
+Intro to full table.
+
+Supplementary material: 2 classes of videos, roughly corresponding to
+the above sub-exeriments.
 
 \begin{tabular}{|c|c|c|c|}
         \hline
         & & {\LARGE cost} & \\
         & & (MNIST) & \\
         & & (negative log-likelihood) & \\
-        & & (after 6 epoches) & \\
+        & & (after 6 epochs) & \\
         \hline
          & 20-10 & 40-10 & 40-20-10\\ \hline
 sigmoid 
@@ -376,22 +424,6 @@ BReLU
         & \includegraphics[scale=0.25]{plots/simple/LF-40B10B-20T10-MNIST-6.png}
         & \includegraphics[scale=0.25]{plots/simple/LF-40B20B10B-20T10-MNIST-6.png} \\ \hline
 \end{tabular}
-
-
-
-
-Uniform measure on the log of the learning rate: Why?  It's an
-approximation to the way people actually explore learning rates.
-People do explore learning rates typically by considering multples.
-And so this is a reasonable approximation to the standard way of
-exploring.  (True also in systematic grid searches.)
-
-Uniform measure on the friction: Why?  People tend to mess around with
-values 0, 0.1., 0.2 etc --- this is a pretty good approximation to the
-way people explore.
-
-Ideally present: 2 classes of videos, roughly corresponding to the
-above sub-exeriments.
 
 
 Claim 1: Once you get into a pretty good regime, there are many more
@@ -425,6 +457,46 @@ maybe it'd be great to ship in production --- but would you really
 want to rely on this?  Magic, not science.  ``Then a miracle occurs''
 school of machine learning.
 
+
+
+
+CIFAR:
+
+Note that the CIFAR results were only obtained for the net
+architecture using 20 hidden units.
+
+Note also that we weren't verifying a hypothesis.
+
+\includegraphics[scale=0.5]{plots/detailed/LF-20R10R-20T10-CIFAR-3.png}
+
+\begin{tabular}{|c|c|c|c|}
+        \hline
+        & & {\LARGE cost} & \\
+        & & (CIFAR-10) & \\
+        & & (negative log-likelihood) & \\
+        & & (20-10-softmax) & \\
+        \hline
+         & 1 epoch & 2 epochs & 3 epochs\\ \hline
+sigmoid 
+        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-1.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-2.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-3.png} \\ \hline
+tanh 
+        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-1.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-2.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-3.png} \\ \hline
+ReLU 
+        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-1.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-2.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-3.png} \\ \hline
+BReLU 
+        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-1.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-2.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-3.png} \\ \hline
+\end{tabular}
+
+
+
 Q: Should we introduce some notion of local variance / local
 dependence on variation of parameters?  Chris: Hold the initialization
 and ordering of data constant, and try the 40 x 4 experiments for a
@@ -433,7 +505,10 @@ ReLU subexperiment --- do we see the same ``splotchiness''?
 ``For practical purposes, BReLU is likely to be a good choice.''
 Caveats.
 
-Momentum-based gradient descent isn't that interesting.  
+Momentum-based gradient descent isn't that interesting.  Cite the
+Simard 2003 results, who also found this.
+
+
 
 
 
@@ -547,15 +622,6 @@ people previously thought, with a suitable schedule of annealing.)
 
 
 
-
-Why did we go for n epochs (where n is whatever it is?)  Combination
-of two answers: (1) Here's our evidence that we're near asymptoting
---- to obtain this, do curve fitting to estimate what the long-run
-cost will be, assume that the cost after 3 epochs is given by $c_1 +
-c_2 * exp(c_3 t)$, where t is the time; (2) Computationally, that's as
-much as we could do.  Shoot for n = 5 or 6 or so.  Note that we need
-to validate the use of the exponential as an approximation for the
-long-run cost.  We ignore first 3 epochs due to possible transients.
 
 Nonlearities we want: sigmoid.  Tanh.  ReLU.  BReLU.
 
