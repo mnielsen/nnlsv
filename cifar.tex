@@ -143,9 +143,14 @@ heuristic rules of thumb for choosing neural network hyper-parameters.
 To convey the type of experiments we do and the results we obtain,
 consider the following graph:
 %
-XXX --- sigmoid, 20 hidden unit, friction versus learning rate.
-Labels: hyper-parameter 1.  hyper-parameter 2.  Cost: nice gradient
-bar thing.  Title(ish): After training epoch 3.
+
+\begin{center}
+\includegraphics[scale=0.8]{plots/example.png}
+\end{center}
+
+%XXX --- sigmoid, 20 hidden unit, friction versus learning rate.
+%Labels: hyper-parameter 1.  hyper-parameter 2.  Cost: nice gradient
+%bar thing.  Title(ish): After training epoch 3.
 
 Caption: Lower cost represents better performance.
 %
@@ -306,6 +311,70 @@ Architecture: 20 hidden unit, 40 hidden unit, 40+20 HU.
 
 
 Training data: MNIST, CIFAR.
+
+
+CIFAR:
+
+\includegraphics[scale=1.0]{plots/detailed/LF-20R10R-20T10-CIFAR-3.png}
+
+\begin{tabular}{|c|c|c|c|}
+        \hline
+        & & {\LARGE cost} & \\
+        & & (CIFAR-10) & \\
+        & & (negative log-likelihood) & \\
+        & & (20-10-softmax) & \\
+        \hline
+         & 1 epoch & 2 epoches & 3 epoches\\ \hline
+sigmoid 
+        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-1.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-2.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-3.png} \\ \hline
+tanh 
+        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-1.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-2.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-3.png} \\ \hline
+ReLU 
+        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-1.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-2.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-3.png} \\ \hline
+BReLU 
+        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-1.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-2.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-3.png} \\ \hline
+\end{tabular}
+
+
+MNIST:
+
+\includegraphics[scale=1.0]{plots/detailed/LF-20R10R-20T10-MNIST-6.png}
+
+\begin{tabular}{|c|c|c|c|}
+        \hline
+        & & {\LARGE cost} & \\
+        & & (MNIST) & \\
+        & & (negative log-likelihood) & \\
+        & & (after 6 epoches) & \\
+        \hline
+         & 20-10 & 40-10 & 40-20-10\\ \hline
+sigmoid 
+        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-MNIST-6.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-40S10S-20T10-MNIST-6.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-40S20S10S-20T10-MNIST-6.png} \\ \hline
+tanh
+        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-MNIST-6.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-40T10T-20T10-MNIST-6.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-40T20T10T-20T10-MNIST-6.png} \\ \hline
+ReLU 
+        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-MNIST-6.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-40R10R-20T10-MNIST-6.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-40R20R10R-20T10-MNIST-6.png} \\ \hline
+BReLU 
+        & \includegraphics[scale=0.25]{plots/simple/LF-20B10B-20T10-MNIST-6.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-40B10B-20T10-MNIST-6.png}
+        & \includegraphics[scale=0.25]{plots/simple/LF-40B20B10B-20T10-MNIST-6.png} \\ \hline
+\end{tabular}
+
+
 
 
 Uniform measure on the log of the learning rate: Why?  It's an
