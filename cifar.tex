@@ -399,12 +399,12 @@ ZZZ
 % to validate the use of the exponential as an approximation for the
 % long-run cost.  We ignore first 3 epochs due to possible transients.
 
-
-
-Intro to full table.
-
-Supplementary material: 2 classes of videos, roughly corresponding to
-the above sub-exeriments.
+The following table summarizes our MNIST results by providing a graph,
+like the previous one, for all architectures and all activation 
+functions. Each row corresponds to an activation function, and each
+column to an architecture. The color scheme for cost and the axes are
+the same as in the previous graph, but left unlabeled to avoid
+clutter.
 
 \begin{tabular}{|c|c|c|c|}
         \hline
@@ -431,6 +431,27 @@ BReLU
         & \includegraphics[scale=0.25]{plots/simple/LF-40B10B-20T10-MNIST-6.png}
         & \includegraphics[scale=0.25]{plots/simple/LF-40B20B10B-20T10-MNIST-6.png} \\ \hline
 \end{tabular}
+
+All these graphs visualize cost after 6 epochs of training. Animated
+versions of these graphs, showing how cost changes over training, are
+provided in the supplementary material as videos, along with the code
+that generates them.
+
+Another manner in which we can visualize the results of these
+experiments is as graphs showing the percent of hyper-parameter 
+choices in a particular sub-experiment that achieve a cost below a
+certain cost threshold. This shows us what the best case performance
+of a given activation function and architecture is, but also what the
+10\% best case performance is, and so on. This allows us to quantify
+not only about how well the network does, but also how easy it is to
+tune.
+
+%%% Example of cost threshold graph
+
+
+
+(Supplementary material: 2 classes of videos, roughly corresponding to
+the above sub-exeriments.)
 
 
 Claim 1: Once you get into a pretty good regime, there are many more
