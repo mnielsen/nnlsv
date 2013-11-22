@@ -209,14 +209,15 @@ benefits to the technique, outside extremely similar circumstances.
 %
 Another problem is that even a heuristic which is literally true may
 have significant caveats.  For example, there has been much recent
-interest in rectified linear units (ReLUs, $max(0,x)$), a type of
-artificial neuron which appears to learn faster than other common
-types of neuron, such as sigmoid and tanh units. (Krizhevsky et al.
-(2012))  Our results confirm that this is often the case, but, as we
-shall see, it is also often much harder to find hyper-parameters so
-ReLUs learn quickly.  We are able to provide a compelling
-visualization demonstrating this, and also to precisely quantify how
-much harder it is to optimize with ReLUs.
+interest in rectified linear units (ReLUs, $max(0,x)$, Glorot (2010),
+Nair \& Hinton (2010), Jarrett (2009)), a type of artificial neuron
+which appears to learn faster than other common types of neuron, such
+as sigmoid and tanh units. (Krizhevsky et al. (2012))  Our results
+confirm that this is often the case, but, as we shall see, it is also
+often much harder to find hyper-parameters so ReLUs learn quickly.  We
+are able to provide a compelling visualization demonstrating this, and
+also to precisely quantify how much harder it is to optimize with
+ReLUs.
 
 %
 % how we approach this problem
@@ -301,9 +302,8 @@ softmax layer.
 
 The experiments made use of four separate activation functions: the
 sigmoid (i.e., logistic), hyperbolic tangent (tanh), rectified linear
-units (ReLUs, Nair & Hinton (2010), Glorot (2010)), and softplus
-(Glorot (2010)).  These activation functions were applied throughout
-the network.
+units (ReLU), and softplus (Glorot (2010), Dugas (2001)).  These
+activation functions were applied throughout the network.
 
 The experiments were performed using the MNIST XXX and CIFAR-10 XXX
 training sets.  These are well-known labelled training sets used for
