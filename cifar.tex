@@ -293,13 +293,16 @@ Our experiments were performed using three neural network
 architectures: a net with a single hidden layer containing 20 hidden
 units; a net with a single hidden layer containing 40 hidden units;
 and a net with two hidden layers, containing 40 and 20 hidden units,
-respectively.
+respectively. All networks have an input layer with a neuron
+corresponding to each pixel channel in the input image (the exact form
+is dataset specific), and an output layer with a neuron for each
+classification label (ten for all the datasets we use), followed by a
+softmax layer.
 
 The experiments made use of four separate activation functions: the
 sigmoid (i.e., logistic), hyperbolic tangent (tanh), rectified linear
 units (ReLU) XXX - citations, and softplus XXX - citations.  These
-activation functions were applied throughout the network, except at
-the output, where a softmax layer was used instead.
+activation functions were applied throughout the network.
 
 The experiments were performed using the MNIST XXX and CIFAR-10 XXX
 training sets.  These are well-known labelled training sets used for
