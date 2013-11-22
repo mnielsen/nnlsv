@@ -144,7 +144,7 @@ To convey the type of experiments we do and the results we obtain,
 consider the following graph:
 %
 \begin{center}
-\includegraphics[scale=0.8]{plots/example.png}
+\includegraphics[scale=0.5]{plots/example.png}
 \end{center}
 
 %XXX --- sigmoid, 20 hidden unit, friction versus learning rate.
@@ -312,7 +312,9 @@ choices of the learning rate and 40 choices of the momentum
 coefficient, for a total of 1,600 = 40 $\times$ 40 networks.  Details
 of the graph are explained below:
 %
+\begin{center}
 \includegraphics[scale=0.5]{plots/detailed/LF-20R10R-20T10-MNIST-6.png}
+\end{center}
 %
 % XXX --- This is currently a lie, we ony have 400 = 20 x 20.
 %
@@ -324,6 +326,7 @@ of the graph are explained below:
 % XXX - we want to comment on the power law.  Replot with log momentum?
 %
 % XXX - Range: 10**-4 to 1?  SOme other range?
+
 To generate this graph we sampled 40 different values for the momentum
 coefficient, ranging uniformly over 0.0 to 1.0.  This sampling process
 reflects the way many researchers informally explore to find suitable
