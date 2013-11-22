@@ -209,14 +209,15 @@ benefits to the technique, outside extremely similar circumstances.
 %
 Another problem is that even a heuristic which is literally true may
 have significant caveats.  For example, there has been much recent
-interest in rectified linear units (ReLUs, XXX - cite), a type of
-artificial neuron which appears to learn faster than other common
-types of neuron, such as sigmoid and tanh units.  Our results confirm
-that this is often the case, but, as we shall see, it is also often
-much harder to find hyper-parameters so ReLUs learn quickly.  We are
-able to provide a compelling visualization demonstrating this, and
-also to precisely quantify how much harder it is to optimize with
-ReLUs.
+interest in rectified linear units (ReLUs, $max(0,x)$,
+\cite{Glorot2010a,Nair2010a,Jarrett2009a}), a type of artificial
+neuron which appears to learn faster than other common types of
+neuron, such as sigmoid and tanh units. \cite{Krizhevsky2012a} Our
+results confirm that this is often the case, but, as we shall see, it
+is also often much harder to find hyper-parameters so ReLUs learn
+quickly.  We are able to provide a compelling visualization
+demonstrating this, and also to precisely quantify how much harder it
+is to optimize with ReLUs.
 
 %
 % how we approach this problem
@@ -301,7 +302,7 @@ softmax layer.
 
 The experiments made use of four separate activation functions: the
 sigmoid (i.e., logistic), hyperbolic tangent (tanh), rectified linear
-units (ReLU) XXX - citations, and softplus XXX - citations.  These
+units (ReLU), and softplus \cite{Glorot2010a,Dugas2001a}.  These
 activation functions were applied throughout the network.
 
 The experiments were performed using the MNIST XXX and CIFAR-10 XXX
@@ -715,7 +716,7 @@ Thanks to David Dalrymple and Jen Dodd for helpful discussions.
 
 %\section*{References}
 % The bibtex filename
-\bibliography{../../../supporting_materials/bibliographies/mybib}
+\bibliography{cifar}
 
 \section*{Figure Legends}
 %\begin{figure}[!ht]
