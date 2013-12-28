@@ -466,8 +466,8 @@ XXX softplus
 
 As before, all these graphs visualize cost after 6 epochs of
 training. Animated versions of these graphs, showing how cost changes
-over training, are provided in the supplementary material as videos,
-along with the code that generates the videos.
+over training, are provided in the supplementary material as Videos
+S1-S12, along with the code that generates the videos.
 
 We can summarize these results in another visualization, shown in
 Figure~\label{fig:fraction}: (XXX - replot this without BReLu, fix
@@ -476,9 +476,9 @@ labels, do at epoch 6, use fraction not percent, change ``cost'' to
 hyper-parameters that achieve a cost below a given cost threshold,
 plotted for several different activation functions.  So, for example,
 let's look at the ReLU graph at a cost threshold of $0.05$.  We see
-that the corresponding value is about $0.35$.  What that means is that
-in our earlier ReLU experiments (fig.~XXX) about 35 percent of the
-experiments achieved a cost below $0.05$.
+that the corresponding fraction is about $0.35$.  What this means is
+that in our earlier ReLU experiments (fig.~XXX) about 35 percent of
+the experiments achieved a cost below $0.05$.
 
 \begin{figure}[!ht]
 \begin{center}
@@ -491,50 +491,48 @@ experiments achieved a cost below $0.05$.
 
 We see that this graph quantifies not only how well a network does for
 the best choice of hyper-parameters, but also how easy it is to tune.
-We can see, for example, that ReLUs achieve (slightly) better
-best-case performance than BReLUs, but BReLUs are significantly easier
-to tune to get near-to-best-case performance.
+We can see, for example, that ReLUs achieve slightly better best-case
+performance than BReLUs (XXX--true for softplus?), but BReLUs are
+significantly easier to tune to get near-to-best-case performance.
 
-The above graph is static.  In the supplementary material we have
-included a video showing how the graph above changes as a function of
-training time.  This video reveals much additional structure --- we
-can see how
+The above graph is static.  In Video S13 we show how the graph changes
+as a function of training time.  For the particular case of MNIST and
+the 20 hidden neuron architecture, the graph changes only a little
+qualitatively over time.  Later, in our discussion of CIFAR-10, the
+video will reveal striking qualitative changes in the performance of
+the different activation functions.
 
-(Supplementary material: 2 classes of videos, roughly corresponding to
-the above sub-exeriments.)
+The results above suggest a number of observations:
 
-The results above suggest a number of striking observations:
+\textbf{Observation 1:} For near-optimal costs, softplus (XXX) has
+many more good hyper-parameters in the momentum-learning rate space
+than there are for other activation functions.
 
-\textbf{Observation 1:} Once you get into a pretty good regime, there
-are many more good hyper-parameters (in the friction-log learning rate
-space) for BReLUs than there are for other squashing functons.
+\textbf{Observation 2:} ReLU's best-case performance is better than
+the tanh and sigmoid, and generally comparable to softplus, with the
+better performance depending on the details of the architecture.  Our
+results on softplus (XXX) suggest that some ReLUs are becoming
+inactive (and thus stopping learning), which can be avoided with
+softplus.
 
-\textbf{Observation 2:} There is a consistent curve relating friction
+\textbf{Observation 3:} ReLUs have substantially more stochastic
+behaviour.  They provide good best-case performance, but are sensitive
+to small perturbations.  By contrast all our other activation
+functions are much smoother.  This makes it easier to find relatively
+stable solutions that won't just fall apart.  
+
+Informally, people who work with large, deep ReLU-based convolutional
+neural networks do not report this kind of instability (cite
+Goodfellow, personal communication XXX).  However, so far as we know
+this has not been quantitatively studied.  If the informal observation
+is borne out then it would be interesting to understand the reasons
+for this difference.
+
+\textbf{Observation 1:} There is a consistent curve relating momentum
 and learning rate.  The curve is such that we see the learning is
 relatively insensitive to the choice of friction.  For practical
 purposes, setting friction at 0.2 is usually enough.  Note that it's
 only a little better than non-momentum methods???
-
-\textbf{Observation 3:} ReLU's best-case performance is better than
-tanh and sigmoid.  Our results on BReLU's suggest that RELu's are
-running into dead neuron problems which can be avoided with BRELu's.
-(ANother possibility would be to consider SOftplus.  We have not done
-this, but...)
-
-\textbf{Observation 4:} Also note the order of the best-case
-performance for nonlinearities.
-
-\textbf{Observation 5:} ReLUs seem to have substantially more
-stochastic behaviour.  They provide good performance, but seem to be
-very sensitive to small perturbations. Contrast with BReLU, sigmoid
-etc.  Sigmoid is much, much smoother.  It's not just best-case which
-matters; how finicky the activation function is matters a lot, too.
-ReLUs surprisingly bad.  Want to be able to find relativley stable
-solutions that won't just fall apart.  A miraculous ``super-good''
-choice of parameters really isn't that much use if noone else could
-ever have found it. SUre, maybe it'd be great to ship in production
---- but would you really want to rely on this?  Magic, not science.
-``Then a miracle occurs'' school of machine learning.
 
 Of course, our data does not in any sense confirm that these
 observations hold generally, since the data used to suggest a
