@@ -460,26 +460,17 @@ along with the code that generates the videos.
 
 We can summarize these results in another visualization, as follows:
 %
-
+\includegraphics[scale=0.25]{plots/simple/XXX}
 %
-What these graphs show is the fraction of hyper-parameter choices that
-achieve a cost below a certain cost threshold, plotted for several
-different choices of activation function.  So, for example, the boa
-see the best case performance for the sigmoid
+What these graphs show is the fraction of hyper-parameter choices (in
+the learning rate-momentum plane) that achieve a cost below a certain
+cost threshold, plotted for several different choices of activation
+function.  This quantifies not only how well the network does for the
+best choice of hyper-parameter, but also how easy it is to tune.
 
-shows us what the
-best case performance of 
-is, but also what the 10\% best case performance is, and so on. 
-a given activation function and architecture
-
-
-This
-allows us to quantify not only about how well the network does, but
-also how easy it is to tune.
-
-%%% Example of cost threshold graph
-
-
+The above graph is static.  In the supplementary material we have
+included a video showing how the graph above changes as a function of
+training time.  This video reveals considerable additional richness.
 
 (Supplementary material: 2 classes of videos, roughly corresponding to
 the above sub-exeriments.)
