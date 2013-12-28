@@ -295,10 +295,11 @@ architectures: a net with a single hidden layer containing 20 hidden
 units; a net with a single hidden layer containing 40 hidden units;
 and a net with two hidden layers, containing 40 and 20 hidden units,
 respectively. All networks have an input layer with a neuron
-corresponding to each pixel channel in the input image (the exact form
-is dataset specific), and an output layer with a neuron for each
-classification label (ten for all the datasets we use), followed by a
-softmax layer.
+corresponding to each pixel in the input image, in the case of the
+grey-scale images in MNIST, and three neurons, corresponding to the
+RGB intensities, for the images in CIFAR-10.  There is also an output
+layer with a neuron for each classification label (ten for all the
+datasets we use), followed by a softmax layer.
 
 The experiments made use of four separate activation functions: the
 sigmoid (i.e., logistic), hyperbolic tangent (tanh), rectified linear
@@ -347,8 +348,8 @@ systematic grid searches.  We use a maximum value of 1.0 XXX for the
 learning rate, since in all our MNIST experiments the nets did not
 appear to be learning anything when the learning rate was that high.
 We use a minimum value of 0.0001 XXX for the learning rate.  With
-these choices our range for the learning rate includes most values
-which have been used in prior literature.
+these choices our range for the learning rate includes values which
+have been used in much of the prior literature on MNIST.
 
 A natural question is why we vary the learning rate while holding the
 number of epochs constant.  Naively, this seems unnatural, since the
@@ -362,24 +363,32 @@ that confronts someone looking to choose good hyper-parameters is how
 to choose the learning rate which gives the best results after a fixed
 number of epochs.
 
-We choose 6 epochs in part because it was computationally feasible,
-and in part because early experiments suggested that the graphs
-obtained were changing only very slowly beyond the second epoch.  The
-classification accuracies obtained after 6 epochs are comparable to
-those obtained historically.  However, it should be noted that recent
-research XXX suggests the value of going to very large numbers of
-epochs ($XXX ~ 10^3$), and using an annealing schedule for learning
-which ultimately results in very low learning rates.  We do not
-investigate these possibilities here, although they suggest natural
-questions for the future.
+There's an additional heuristic justification for this practice. When
+searching for a local minimum, we first pass through a transient phase
+in which the stochastic gradient descent algorithm tries to get near
+that minimum as quickly as possible.  The higher the learning rate the
+fewer epochs required.  But once that transient phase is over it is no
+longer the speed of movement which matters.  If, in our examples, this
+happens very early on --- say after one or fewer epochs --- then the
+naive argument given above completely breaks down, and it makes sense
+to study learning rate and momentum as independent variables, with the
+total training time fixed.  We cannot defend this argument, since we
+have not precisely defined transience, and thus cannot say whether we
+exit this regime quickly in our examples.  However, we mention the
+argument since some informal testing suggests that we do exit the
+transient phase quickly over much of our hyper-parameter space.
 
-XXX - input structure
-
-ZZZ
-
-% XXX --- The following is an alternative answer to the above question
-% We don't have the evidence to support that we're in this post-transient
-% phase (although we suspect we are for most of the parameters plotted)
+% We don't actually know how to define transient, or what smoking gun
+% to look for.  It might be interesting to look at a quantity like g_n
+% . g_{n+1} / norms, where g_n is the gradient at the nth iteration.
+% This probably starts out positive, and then transitions to zero at
+% some point --- that's a good start on a definition of a transient
+% phase.
+%
+% XXX --- OLD VERSION OF THE ABOVE ARGUMENT: The following is an
+% alternative answer to the above question We don't have the evidence
+% to support that we're in this post-transient phase (although we
+% suspect we are for most of the parameters plotted)
 %
 % Wouldn't it make more sense to vary the number of epochs so the
 % product with the learning rate was a constant?  This argument is
@@ -387,6 +396,18 @@ ZZZ
 % get into the neighbourhood of a reasonable solution to the cost
 % optimization problem.  But it's no longer correct when exploring the
 % microstructure of the fitness landscape near that neighborhood.
+
+A weakness of the approach is that we only train for 6 epochs.  This
+was chosen because it was computationally feasible given our computing
+resources.  With more computing power it would be desirable to train
+for more epochs.  We do note that the classification accuracies we
+obtained after 6 epochs (using the best hyper-parameters) are
+comparable to those obtained historically for similar architectures.
+Note also that recent research XXX suggests the value of going to very
+large numbers of epochs (on the order of $10^3$), and using an
+annealing schedule for learning which ultimately results in very low
+learning rates.  We do not investigate these possibilities here,
+although they suggest natural questions for the future.
 
 % XXX --- Some interesting speculation here.  We haven't actually done it.
 % 
@@ -400,20 +421,20 @@ ZZZ
 % long-run cost.  We ignore first 3 epochs due to possible transients.
 
 The following table summarizes our MNIST results by providing a graph,
-like the previous one, for all architectures and all activation 
+like the previous one, for all architectures and all activation
 functions. Each row corresponds to an activation function, and each
-column to an architecture. The color scheme for cost and the axes are
-the same as in the previous graph, but left unlabeled to avoid
-clutter.
+column to an architecture.  The architecture is indicated in the
+column heading, e.g., the first column shows results with the 28
+$\times$ 28 = 784 input units, 20 hidden units, and 10 output units.
+The color scheme for cost and the axes are the same as in the previous
+graph, but left unlabeled to avoid clutter.
 
 \begin{tabular}{|c|c|c|c|}
         \hline
-        & & {\LARGE cost} & \\
-        & & (MNIST) & \\
-        & & (negative log-likelihood) & \\
-        & & (after 6 epochs) & \\
+        & & Cost for the MNIST data & \\
+        & & set after 6 epochs & \\
         \hline
-         & 20-10 & 40-10 & 40-20-10\\ \hline
+         & 784-20-10 & 784-40-10 & 784-40-20-10\\ \hline
 sigmoid 
         & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-MNIST-6.png}
         & \includegraphics[scale=0.25]{plots/simple/LF-40S10S-20T10-MNIST-6.png}
@@ -426,25 +447,35 @@ ReLU
         & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-MNIST-6.png}
         & \includegraphics[scale=0.25]{plots/simple/LF-40R10R-20T10-MNIST-6.png}
         & \includegraphics[scale=0.25]{plots/simple/LF-40R20R10R-20T10-MNIST-6.png} \\ \hline
-BReLU 
+XXX softplus 
         & \includegraphics[scale=0.25]{plots/simple/LF-20B10B-20T10-MNIST-6.png}
         & \includegraphics[scale=0.25]{plots/simple/LF-40B10B-20T10-MNIST-6.png}
         & \includegraphics[scale=0.25]{plots/simple/LF-40B20B10B-20T10-MNIST-6.png} \\ \hline
 \end{tabular}
 
-All these graphs visualize cost after 6 epochs of training. Animated
-versions of these graphs, showing how cost changes over training, are
-provided in the supplementary material as videos, along with the code
-that generates them.
+As before, all these graphs visualize cost after 6 epochs of
+training. Animated versions of these graphs, showing how cost changes
+over training, are provided in the supplementary material as videos,
+along with the code that generates the videos.
 
-Another manner in which we can visualize the results of these
-experiments is as graphs showing the percent of hyper-parameter 
-choices in a particular sub-experiment that achieve a cost below a
-certain cost threshold. This shows us what the best case performance
-of a given activation function and architecture is, but also what the
-10\% best case performance is, and so on. This allows us to quantify
-not only about how well the network does, but also how easy it is to
-tune.
+We can summarize these results in another visualization, as follows:
+%
+
+%
+What these graphs show is the fraction of hyper-parameter choices that
+achieve a cost below a certain cost threshold, plotted for several
+different choices of activation function.  So, for example, the boa
+see the best case performance for the sigmoid
+
+shows us what the
+best case performance of 
+is, but also what the 10\% best case performance is, and so on. 
+a given activation function and architecture
+
+
+This
+allows us to quantify not only about how well the network does, but
+also how easy it is to tune.
 
 %%% Example of cost threshold graph
 
@@ -454,7 +485,7 @@ tune.
 the above sub-exeriments.)
 
 
-Claim 1: Once you get into a pretty good regime, there are many more
+Observation 1: Once you get into a pretty good regime, there are many more
 good hyper-parameters (in the friction-log learning rate space) for
 BReLUs than there are for other squashing functons.  
 
@@ -678,6 +709,8 @@ of optimal hyper-parameters.
 + Mini-batch size.
 
 FUTURE POSSIBILITIES: CO might do a Nesterov experiment?  SoftPlus.
+
+XXX --- adaptive hyper-parameters?  Annealing?  Etc.
 
 \subsection*{Bevelled Rectified Linear Units}
 
