@@ -141,31 +141,37 @@ heuristic rules of thumb for choosing neural network hyper-parameters.
 % the flavour
 %
 To convey the type of experiments we do and the results we obtain,
-consider the following graph:
+consider the graph in Figure~\label{fig:example}.  This graph shows
+the performance of a single neural network architecture on a
+particular image recognition task.  The important thing is that
+performance is shown for a very large number of different training
+configurations, all with the same architecture.  In particular, the
+$x$ and $y$ axes are two important hyper-parameters for the neural
+network (details to be explained later).  So we've trained $40 \times
+40 = 1,600$ neural nets, for $40$ different choices of the first
+hyper-parameter, and $40$ different choices of the second
+hyper-parameter.  The intensity of colour at the corresponding point
+on the graph represents how well the neural network performs: dark is
+poor performance, light is good performance.  By examining a
+judiciously selected set of these graphs we will deduce heuristic
+rules for choosing hyper-parameters.
+
 %
+\begin{figure}[!ht]
 \begin{center}
-\includegraphics[scale=0.5]{plots/example.png}
+\includegraphics[width=4in]{plots/example.eps}
 \end{center}
+\caption{ {\bf The performance of a single neural network architecture
+    on a particular image recognition task}.  Lower cost represents
+  better performance.  See the text for details.}
+\label{fig:example}
+\end{figure}
 
 %XXX --- sigmoid, 20 hidden unit, friction versus learning rate.
 %Labels: hyper-parameter 1.  hyper-parameter 2.  Cost: nice gradient
 %bar thing.  Title(ish): After training epoch 3.
 
-Caption: Lower cost represents better performance.
-%
-What this graph shows is the performance of a single neural network
-architecture on a particular image recognition task.  The important
-thing is that performance is shown for a very large number of
-different training configurations, all with the same architecture.  In
-particular, the x and y axes are two important hyper-parameters for
-the neural network (details to be explained later).  So we've trained
-$40 \times 40 = 1,600$ neural nets, for $40$ different choices of
-hyper-parameter $1$, and $40$ different choices of hyper-parameter
-$2$.  The intensity of colour at the corresponding point on the graph
-represents how well the neural network performs: dark is poor
-performance, light is good performance.  By examining a judiciously
-selected set of these graphs we will deduce heuristic rules for
-choosing hyper-parameters.
+
 
 %
 % expanding on the type of results we get
@@ -311,15 +317,20 @@ and CIFAR-10 (Krizhevsky (2009)) data sets.  These are well-known
 labelled training sets used for image recognition.  Training was
 performed using a negative log-likelihood cost function.
 
-The following graph shows the behaviour of 1,600 neural networks when
-trained on the MNIST data for six epochs. These correspond to 40
-choices of the learning rate and 40 choices of the momentum
-coefficient, for a total of 1,600 = 40 $\times$ 40 networks.  Details
-of the graph are explained below:
+The graph in Figure~\ref{fig:mnist_basic} shows the behaviour of 1,600
+neural networks when trained on the MNIST data for six epochs. These
+correspond to 40 choices of the learning rate and 40 choices of the
+momentum coefficient, for a total of 1,600 = 40 $\times$ 40 networks.
+
 %
+\begin{figure}[!ht]
 \begin{center}
-\includegraphics[scale=0.5]{plots/detailed/LF-20R10R-20T10-MNIST-6.png}
+\includegraphics[width=4in]{plots/detailed/LF-20R10R-20T10-MNIST-6.eps}
 \end{center}
+\caption{ {\bf The behaviour of 1,600 neural networks when trained on
+    the MNIST data for six epochs.}}
+\label{fig:mnist_basic}
+\end{figure}
 %
 % XXX --- This is currently a lie, we ony have 400 = 20 x 20.
 %
@@ -436,21 +447,21 @@ graph, but left unlabeled to avoid clutter.
         \hline
          & 784-20-10 & 784-40-10 & 784-40-20-10\\ \hline
 sigmoid 
-        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-MNIST-6.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-40S10S-20T10-MNIST-6.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-40S20S10S-20T10-MNIST-6.png} \\ \hline
+        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-MNIST-6.eps}
+        & \includegraphics[scale=0.25]{plots/simple/LF-40S10S-20T10-MNIST-6.eps}
+        & \includegraphics[scale=0.25]{plots/simple/LF-40S20S10S-20T10-MNIST-6.eps} \\ \hline
 tanh
-        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-MNIST-6.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-40T10T-20T10-MNIST-6.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-40T20T10T-20T10-MNIST-6.png} \\ \hline
+        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-MNIST-6.eps}
+        & \includegraphics[scale=0.25]{plots/simple/LF-40T10T-20T10-MNIST-6.eps}
+        & \includegraphics[scale=0.25]{plots/simple/LF-40T20T10T-20T10-MNIST-6.eps} \\ \hline
 ReLU 
-        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-MNIST-6.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-40R10R-20T10-MNIST-6.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-40R20R10R-20T10-MNIST-6.png} \\ \hline
+        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-MNIST-6.eps}
+        & \includegraphics[scale=0.25]{plots/simple/LF-40R10R-20T10-MNIST-6.eps}
+        & \includegraphics[scale=0.25]{plots/simple/LF-40R20R10R-20T10-MNIST-6.eps} \\ \hline
 XXX softplus 
-        & \includegraphics[scale=0.25]{plots/simple/LF-20B10B-20T10-MNIST-6.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-40B10B-20T10-MNIST-6.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-40B20B10B-20T10-MNIST-6.png} \\ \hline
+        & \includegraphics[scale=0.25]{plots/simple/LF-20B10B-20T10-MNIST-6.eps}
+        & \includegraphics[scale=0.25]{plots/simple/LF-40B10B-20T10-MNIST-6.eps}
+        & \includegraphics[scale=0.25]{plots/simple/LF-40B20B10B-20T10-MNIST-6.eps} \\ \hline
 \end{tabular}
 
 As before, all these graphs visualize cost after 6 epochs of
@@ -458,15 +469,31 @@ training. Animated versions of these graphs, showing how cost changes
 over training, are provided in the supplementary material as videos,
 along with the code that generates the videos.
 
-We can summarize these results in another visualization, as follows:
-%
-\includegraphics[scale=0.25]{plots/simple/XXX}
-%
-What these graphs show is the fraction of hyper-parameter choices (in
-the learning rate-momentum plane) that achieve a cost below a certain
-cost threshold, plotted for several different choices of activation
-function.  This quantifies not only how well the network does for the
-best choice of hyper-parameter, but also how easy it is to tune.
+We can summarize these results in another visualization, shown in
+Figure~\label{fig:fraction}: (XXX - replot this without BReLu, fix
+labels, do at epoch 6, use fraction not percent, change ``cost'' to
+``cost threshold'') What this graph shows is the fraction of
+hyper-parameters that achieve a cost below a given cost threshold,
+plotted for several different activation functions.  So, for example,
+let's look at the ReLU graph at a cost threshold of $0.05$.  We see
+that the corresponding value is about $0.35$.  What that means is that
+in our earlier ReLU experiments (fig.~XXX) about 35 percent of the
+experiments achieved a cost below $0.05$.
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=4in]{plots/detailed/LF-20a10a-20T10-MNIST-3-percent.eps}
+\end{center}
+\caption{ {\bf The fraction of hyper-parameters achieving a cost below
+    a given cost threshold.}}
+\label{fig:fraction}
+\end{figure}
+
+We see that this graph quantifies not only how well a network does for
+the best choice of hyper-parameters, but also how easy it is to tune.
+We can see, for example, that ReLUs achieve (slightly) better
+best-case performance than BReLUs, but BReLUs are significantly easier
+to tune to get near-to-best-case performance.
 
 The above graph is static.  In the supplementary material we have
 included a video showing how the graph above changes as a function of
@@ -518,7 +545,17 @@ architecture using 20 hidden units.
 
 Note also that we weren't verifying a hypothesis.
 
-\includegraphics[scale=0.5]{plots/detailed/LF-20R10R-20T10-CIFAR-3.png}
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=4in]{plots/detailed/LF-20R10R-20T10-CIFAR-3.eps}
+\end{center}
+\caption{
+{\bf Bold the first sentence.}  Rest of figure 2  caption.  Caption 
+should be left justified, as specified by the options to the caption 
+package.
+}
+\label{Figure_label}
+\end{figure}
 
 \begin{tabular}{|c|c|c|c|}
         \hline
@@ -529,21 +566,21 @@ Note also that we weren't verifying a hypothesis.
         \hline
          & 1 epoch & 2 epochs & 3 epochs\\ \hline
 sigmoid 
-        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-1.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-2.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-3.png} \\ \hline
+        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-1.eps}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-2.eps}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-3.eps} \\ \hline
 tanh 
-        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-1.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-2.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-3.png} \\ \hline
+        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-1.eps}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-2.eps}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-3.eps} \\ \hline
 ReLU 
-        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-1.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-2.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-3.png} \\ \hline
+        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-1.eps}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-2.eps}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-3.eps} \\ \hline
 BReLU 
-        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-1.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-2.png}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-3.png} \\ \hline
+        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-1.eps}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-2.eps}
+        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-3.eps} \\ \hline
 \end{tabular}
 
 
