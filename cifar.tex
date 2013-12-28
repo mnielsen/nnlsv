@@ -503,38 +503,43 @@ can see how
 (Supplementary material: 2 classes of videos, roughly corresponding to
 the above sub-exeriments.)
 
+The results above suggest a number of striking observations:
 
-Observation 1: Once you get into a pretty good regime, there are many more
-good hyper-parameters (in the friction-log learning rate space) for
-BReLUs than there are for other squashing functons.  
+\textbf{Observation 1:} Once you get into a pretty good regime, there
+are many more good hyper-parameters (in the friction-log learning rate
+space) for BReLUs than there are for other squashing functons.
 
-Claim 2: There is a consistent curve relating friction and learning
-rate.  The curve is such that we see the learning is relatively
-insensitive to the choice of friction.  For practical purposes,
-setting friction at 0.2 is usually enough.  Note that it's only a
-little better than non-momentum methods???
+\textbf{Observation 2:} There is a consistent curve relating friction
+and learning rate.  The curve is such that we see the learning is
+relatively insensitive to the choice of friction.  For practical
+purposes, setting friction at 0.2 is usually enough.  Note that it's
+only a little better than non-momentum methods???
 
-Claim 3: ReLU's best-case performance is better than tanh and sigmoid.
-Our results on BReLU's suggest that RELu's are running into dead
-neuron problems which can be avoided with BRELu's.  (ANother
-possibility would be to consider SOftplus.  We have not done this,
-but...)
+\textbf{Observation 3:} ReLU's best-case performance is better than
+tanh and sigmoid.  Our results on BReLU's suggest that RELu's are
+running into dead neuron problems which can be avoided with BRELu's.
+(ANother possibility would be to consider SOftplus.  We have not done
+this, but...)
 
-Claim 4: Also note the order of the best-case performance for
-nonlinearities.
+\textbf{Observation 4:} Also note the order of the best-case
+performance for nonlinearities.
 
-Claim 5: ReLUs seem to have substantially more stochastic behaviour.
-They provide good performance, but seem to be very sensitive to small
-perturbations. Contrast with BReLU, sigmoid etc.  Sigmoid is much,
-much smoother.  It's not just best-case which matters; how finicky the
-activation function is matters a lot, too.  ReLUs surprisingly bad.
-Want to be able to find relativley stable solutions that won't just
-fall apart.  A miraculous ``super-good'' choice of parameters really
-isn't that much use if noone else could ever have found it. SUre,
-maybe it'd be great to ship in production --- but would you really
-want to rely on this?  Magic, not science.  ``Then a miracle occurs''
-school of machine learning.
+\textbf{Observation 5:} ReLUs seem to have substantially more
+stochastic behaviour.  They provide good performance, but seem to be
+very sensitive to small perturbations. Contrast with BReLU, sigmoid
+etc.  Sigmoid is much, much smoother.  It's not just best-case which
+matters; how finicky the activation function is matters a lot, too.
+ReLUs surprisingly bad.  Want to be able to find relativley stable
+solutions that won't just fall apart.  A miraculous ``super-good''
+choice of parameters really isn't that much use if noone else could
+ever have found it. SUre, maybe it'd be great to ship in production
+--- but would you really want to rely on this?  Magic, not science.
+``Then a miracle occurs'' school of machine learning.
 
+Of course, our data does not in any sense confirm that these
+observations hold generally, since the data used to suggest a
+hypothesis cannot also be used to confirm it!  However, it does
+suggest investigating these observations
 
 
 
