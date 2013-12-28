@@ -528,11 +528,35 @@ this has not been quantitatively studied.  If the informal observation
 is borne out then it would be interesting to understand the reasons
 for this difference.
 
-\textbf{Observation 1:} There is a consistent curve relating momentum
-and learning rate.  The curve is such that we see the learning is
-relatively insensitive to the choice of friction.  For practical
-purposes, setting friction at 0.2 is usually enough.  Note that it's
-only a little better than non-momentum methods???
+\textbf{Observation 4:} This is really a collection of closely-related
+observations about the...
+
+Consider again one of our earlier plots... XXX... Removing all the
+structure from it we obtain... XXX.  Suppose we fix a given value of
+momentum.  Then at what value or values of the learning rate do we
+obtain the optimal cost?  A prior it seems possible that there might
+be many possible values: XXX.  There might be regions, or even
+multiple regions: XXX.  Our data suggest that in fact the cost is a
+convex function of the learning rate, and that there is a single value
+for the optimal learning rate.  Now, we can repeat this process for
+other values of momentum, and, again, we find a single optimal value
+for the corresponding learning rate.  So we can actually plot a graph
+showing the optimal learning rate for each different momentum: XXX.
+The shape of this graph is roughly the same for all activation
+functions and architectures. qWhat is truly remarkable, however, is
+that it seems that the optimal value for the cost is very nearly
+independent of the value of the momentum.  To put it another way, if
+we consider the values of (learning rate, momentum) which come near to
+optimizing the cost, then they are approximated by a one-dimensional
+curve: XXX.  The shape of this curve varies from thing to thing, but
+is broadly consistent.  A priori, of course, this need not have been
+the case.  It is perfectly possible that this near-optimizing set of
+hyper-parameters have a very complex shape: XXX.  This has several
+nice consequences.  First, cost is relatively insensitive to the
+choice of momentum.  For practical purposes, setting momentum at 0 and
+usually regular gradient descent seems to work about as well as with
+the optimal value of momen tum.
+
 
 Of course, our data does not in any sense confirm that these
 observations hold generally, since the data used to suggest a
