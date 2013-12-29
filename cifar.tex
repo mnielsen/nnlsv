@@ -247,8 +247,8 @@ and complementary to prior work.
 %
 In recent years there has been considerable focus on automated
 procedures for finding hyper-parameters.  The simplest approaches are
-box search (XXX cite) and variations.  More sophisticated methods are
-now being developed, such as XXX, and Bayesian parameter optimization.
+grid search XXX and variations.  More sophisticated methods are now
+being developed, such as XXX, and Bayesian parameter optimization.
 Encouraging recent results on Bayesian parameter optimization achieve
 XXX.  However, to make Bayesian parameter optimization work well you
 need good choices of prior distribution on the hyper-parameters.  The
@@ -305,7 +305,11 @@ corresponding to each pixel in the input image, in the case of the
 grey-scale images in MNIST, and three neurons, corresponding to the
 RGB intensities, for the images in CIFAR-10.  There is also an output
 layer with a neuron for each classification label (ten for all the
-datasets we use), followed by a softmax layer.
+datasets we use), followed by a softmax layer.  Weights were
+initialized by sampling from a normal distribution with mean $0$ and
+standard deviation $1/\sqrt{n}$, where $n$ is the number of inputs to
+a neuron.  Biases were set to $0$.  Mini-batch size here and in later
+experiments was set to $30$.
 
 The experiments made use of four separate activation functions: the
 sigmoid (i.e., logistic), hyperbolic tangent (tanh), rectified linear
@@ -525,6 +529,12 @@ paper XXX).  However, so far as we know this has not been
 quantitatively studied.  If the informal observation is borne out then
 it would be interesting to understand the reasons for this difference.
 
+Glorot \emph{et al}~\cite{Glorot2010a} have also done experiments
+using ReLU and softplus in deep networks.  They found ReLU to
+generally be better.  Although the networks they consider were very
+different to ours, it would obviously be desirable to understand and
+reconcile their results with ours.
+
 \textbf{Observation 3: the momentum-learning rate tradeoff:} \emph{A
   priori}, the set of hyper-parameter values that result in the best
 cost, or very near to the best cost, could take any number of shapes,
@@ -545,41 +555,41 @@ We find, however, that the best results form a smooth, simple curve in
 hyper-parameter space.  Surprisingly, the qualitative, log-like shape
 of this curve is consistent across all examples, looking roughly like: 
 %
-\\
+\begin{center}
+\includegraphics[width=4in]{plots/detailed/OptimalCorrect.eps}
+\end{center}
 %
-
-As a consequence the curve of near-optimal results can be interpreted
-as a function mapping choices of momentum coefficient to good choices
-of learning rate. Provided one uses this good choice of learning rate,
-the cost resulting from training has little dependence on the choice
-of momentum coefficient.  This is quite remarkable, and means that for
-practical purposes setting momentum at 0 and using regular gradient
-descent works about as well as attempting to optimize the value of
-momentum.  (C.f. Simard \emph{et al}~\cite{Simard2003a}, who also
-found little advantage in momentum-based approaches.)
-
-Summing up, we find that cost is a very simple valley-like function of
-learning rate and momentum coefficient. Cost gets lower as one gets
-closer to the optimal curve. With some minor reparameterization, it
-would be convex, modulo some noise. Handily, if one fixes momentum
-coefficient, it appears to be a convex function of learning rate.
+This curve corresponds to the bottom of the valley-like cost functions
+we saw above in Figures XXX.  This curve of near-optimal results can
+be interpreted as a function mapping choices of momentum coefficient
+to good choices of learning rate. Provided one uses this good choice
+of learning rate, the cost resulting from training has little
+dependence on the choice of momentum coefficient.  This is quite
+remarkable, and means that for practical purposes setting momentum
+coefficient to 0 and using regular gradient descent works about as
+well as attempting to optimize the value of momentum.  These results
+can be compared to those of Simard \emph{et al}~\cite{Simard2003a},
+who also found little advantage in momentum-based approaches.
+Parenthetically, we make the final remark that, inspecting the cost
+functions of Figures~XXX, the cost appears to be a convex function of
+learning rate.
 
 %
 % CIFAR:
 %
-Our results up to now have been for the MNIST data set.  Let's switch
-to describing the analogous results for the CIFAR-10 data set.  Note
-that the CIFAR-10 results were only obtained for network architectures
-using 20 hidden units, due to the higher computational cost of running
-networks for CIFAR-10.  The graph in Figure~\ref{fig:cifar_basic}
-shows the behaviour of 1,600 ReLU-based neural networks when trained
-on the CIFAR-10 data for six epochs. These correspond to 40 choices of
-the learning rate and 40 choices of the momentum coefficient, for a
-total of 1,600 = 40 $\times$ 40 networks.  The momentum range is
-chosen in the same way as for MNIST, uniformly over the range 0.0 to
-1.0.  The learning rate is chosen logarithmically, as for MNIST, but
-over a different range, from 0.1 to 0.000001, as this was better
-adapted to the CIFAR-10 data.
+\textbf{CIFAR-10:} Our results up to now have been for the MNIST data
+set.  Let's switch to describing the analogous results for the
+CIFAR-10 data set.  Note that the CIFAR-10 results were only obtained
+for network architectures using 20 hidden units, due to the higher
+computational cost of running networks for CIFAR-10.  The graph in
+Figure~\ref{fig:cifar_basic} shows the behaviour of 1,600 ReLU-based
+neural networks when trained on the CIFAR-10 data for six
+epochs. These correspond to 40 choices of the learning rate and 40
+choices of the momentum coefficient, for a total of 1,600 = 40
+$\times$ 40 networks.  The momentum range is chosen in the same way as
+for MNIST, uniformly over the range 0.0 to 1.0.  The learning rate is
+chosen logarithmically, as for MNIST, but over a different range, from
+0.1 to 0.000001, as this was better adapted to the CIFAR-10 data.
 
 \begin{figure}[!ht]
 \begin{center}
@@ -642,31 +652,113 @@ the observations.  However, it does suggest investigating these
 observations more generally to determine the limits of their
 applicability.
 
-ZZZ
+\subsubsection*{Further choices of hyper-parameter}
 
+We've now looked in detail at how our networks behave as a function of
+learning rate and momentum coefficient.  Of course, there are many
+other hyper-parameters which can potentially be set.  Broadly
+speaking, the hyper-parameters divide up into two types:
+\begin{itemize}
+\item \textbf{Learning parameters:} Including, for example, the
+  momentum coefficient, learning rate, mini-batch size, training set
+  (including training set size).
 
-XXX - observation 4.
+\item \textbf{Architectural parameters:} Structure of the layers,
+  activation function, weight and bias initialization, cost function.
+\end{itemize}
+These are just a sample of the hyper-parameters.  In fact, many more
+could easily be mentioned --- things like annealing schedule for
+learning rate, per-layer (and perhaps even per-neuron) learning rates
+and momentum coefficients, and so on.
 
+Up to now we've been looking just at two hyper-parameters, learning
+rate and momentum coefficient.  Later on we'll conduct similar
+experiments generating two-dimensional plots based on the following
+pairs of hyper-parameters: (1) weight initialization in layer 1 versus
+layer 2; (2) learning rate in layer 1 versus layer 2; (3) number of
+hidden units versus size of training data.
 
-2. Initialization of weights.
+In each case the visualizations we obtain will lead us to some
+striking observations, and hypotheses which may perhaps be confirmed
+by future experiments.
 
-Architecture: 20 HU.
+One may naturally ask why we make these particular choices of 2d
+section?  There are many other possibilities that are clearly worth
+investigating.  Our choices in this paper arose while working on
+another project in which these particular questions\footnote{Except
+  (3), the number of hidden units versus size of training data, which
+  was done entirely for curiosity's sake.} arose as a practical matter
+affecting our choice of hyper-parameters. E.g., we needed to make
+choices regarding the learning rate / momentum coefficient tradeoff.
+Of course a thorough investigation of all possible pairs of
+hyper-parameters would be a gargantuan undertaking, absorbing a great
+deal of time (and computational power).  So to some extent our choices
+were arbitrary, but they were motivated by practical concerns, and we
+believe the visualizations obtained have considerable independent
+interest.
 
-Activation functions: ReLU, sigmoid, tanh, TODO BReLU.
+A possible quibble with our approach is that we have focused on
+plotting cost, not classification accuracy.  We chose to focus on cost
+because fundamentally this is what the stochastic gradient descent
+algorithm is trying to minimize.  Of course, for practical purposes
+classification accuracy of course matters, as well as issues such as
+overfitting and choice of cost function.  Further work could be done
+to address these issues.  The code we've made available (XXX) could,
+of course, be adapted to study these issues.
 
-Training data: CIFAR.
+\subsubsection*{Weight initialization in layer 1 versus layer 2}
 
-Results: 2 types of movie. 
+Let us now move away from learning rate and momentum, and consider
+instead other hyper-parameters.  One crucial class of hyper-parameters
+in a neural network is the way weights in the network are initialized.
+With poor initialization, networks can completely fail to learn.  By
+contrast, much of the recent progress in deep learning has come from
+finding better initialization techniques.  To gain some insight into
+impact of weight initialization we conducted some simple experiments
+to visualize the impact of different weight initialization choices.
 
-Claim: sigmoid is almost insensitive to initialization.
+We considered the CIFAR-10 classification problem.  We used a single
+neural network architecture, with $32 \times 32 \times 3$ input
+neurons, encoding the different pixel channel intensities, a single
+hidden layer containing 20 hidden units, and 10 output neurons, with a
+softmax.  We considered three (XXX) different activation functions:
+sigmoid, tanh, and ReLU.  All biases are initialized to $0$, and
+learning rate and momentum coefficients selected using the optimal
+values from the experiments in the previous section.
 
-Claim: ReLU cares a lot about init.  THe product of the SDs matters a
-lot.  ANd it's stochastic.
+In this network, choices need to be made about how to initialize the
+weights.  A common strategy in a fully-connected network like this is
+that a neuron with $n$ inputs has weights sampled from a normal
+distribution with mean $0$ and standard deviation $1/\sqrt{n}$.  In
+our experiments we used two parameters, which we shall $w_1$ and
+$w_2$.  Weights in the first layer are initialized using normal
+distributions with mean $0$ and standard deviation $w_1$.  Weights in
+the second layer are initialized using normal distributions with mean
+$0$ and standard deviation $w_2$.  We allow both of these parameters
+to vary from $0.0$ to $0.5$, and take $20$ parameter values for $w_1$
+uniformly space in this range, and similarly for $w_2$.  The results
+are illustrated in the table below:
 
+XXX: sigmoid, tanh, ReLU.  Add special points showing various popular
+schemes: 1/ rt n, 1/ rt n+m (Bengio paper on hyper-parameters).  Look
+for other popular approaches?
 
+Videos showing the time evolution of these graphs are available in the
+Supporting Information, Videos S18--S20.
 
+\textbf{Observation 4: The sigmoid results are almost insensitive to
+  initialization.}  More precisely, provided the cost does not diverge
+it seems to matter little how the weight initalizations are chosen.
+We see a similar, albeit weaker, effect for the tanh activation.
 
-3. Learning rate 1 versus learning rate 2.
+\textbf{Obervation 5: The ReLU results depend sensitively on
+  initialization, and show a lot of stochastic variance.}  We see a
+weak effect whereby a large value for $w_1$ can to some extent be
+compensated by a small value for $w_2$ and vice versa.  Looking along
+hyperbolae in the graphs we can see that, very roughly, it is the
+product $w_1 w_2$ that determines the behaviour.
+
+\subsubsection*{Learning rate in layer 1 versus layer 2}
 
 Architecture: 20 HU, 40 HU, 40+20 HU (fixed learning rate in final
 layer).
@@ -677,6 +769,7 @@ Training data: CIFAR.
 
 Claim: Best rates not on diagonal.
 
+\subsubsection*{Number of hidden units versus size of training data}
 
 4. Number of HU (single layer) versus size of training data
 
@@ -689,145 +782,16 @@ Training data: MNIST.
 
 CLaim: Surprising how little data, or how littl HU are required.
 
-
-
-
-
-
-
-
-Setup / detailed comments about what we do: 
-
-+ Details of what is done: The hyperparameters divide up into two types:
-
-+ Learning parameters: friction (correct to momentum), learning rate.
-AMount of training data (sort of).  Other choices: Mini-batch size;
-use of momentum based SGD.  Choice of training set.
-
-+ Architecural parameters: weight initialization, structure of the
-layers.  Activation function.  Stuff that's fixed: Cost function;
-softmax.
-
-+ Why these choices of 2d section, i.e., why these particular pairs?
-It's worth pointing out that there are many other possibilities, and
-many that are clearly worth investigating.  Our choices in this
-particular paper were largely motivated by anothr project, in which
-these particular questions arose as a practical matter affecting our
-choice of hyper-parameters --- eg., the learning rate / frition
-tradeoff, etc.  We believe that thse hoices are likely to be of broad
-interest, but much more could be done.  A thorough examination would
-be enormous.  SO to extent this is arbitrary, but it was motivated by
-practically arising concerns.  COmputational expense; readability is
-the real issue.
-
-
-+ SHould we do classification accuracy?  Cost?  SOmething else?
-Should make it easy to generate data, so anyone who cares can easily
-compare and contrast.  (This means is that to some extent it doesn't
-matter if we make the wrong choice.)  We will do at least one example
-where we do both cost and classification accuracy.  We choose to focus
-on cost because fundamentally this is what the SGD agorithmi is trying
-to minimize.  Hoever for practial purposes classification accuracy of
-course matters, and issues such as overfitting --- further work would
-need to be done to addess these.  Note: One should also do it for
-different cost functions.
-
-
-
-
-
-
-
-
-
-
-Results
-
-+ ??? To talk about: low-dimensional ``optimal'' manifold in
-hyperparameter space.  Bengio's ICML2011 for algorithms on tuning
-hyperparameters.
-
-+ Obviously 3d versions... hard to computationally.
-
-(Note: In some sense, it's 2+1 dimension, because we're actually
-looking over training time.  We do Not look to saturate, i.e., to
-get to optimal performance.  So the results are more about how quickly
-we're learning, not asymptotic capacity.  Add a caveat: in fact,
-almost noone ever does this.  One of the lessons of recent work is
-that there's much more benefit to going to long training times than
-people previously thought, with a suitable schedule of annealing.)
-
-
-
-
-
-
-
-Nonlearities we want: sigmoid.  Tanh.  ReLU.  BReLU.
-
-Data sets: CIFAR.  MNIST.
-
-Weight initialization: 1/sqrt n.  10 / sqrt n.
-
-Bias: 0 and 1.
-
-Architectures.  20 neurons. 40 neurons.  20+40 neurons.  For 40 and
-20+40 neurons, CIFAR only, one weight initialization only.
-
-Averaging: Don't do any averaging for experiments.
-
-List of desirable properties for nonlinearities.  Discuss.  It's a
-tentative list, but did lead to BReLUs.  It's a first cut, Softplus
-also has many of these properties, it would be interesting to explore
-more systematically.
-
-
-+ Weight initization doesn't matter for sigmoids, but it does for ReLUs.
-
-+ Sample the space of hyper-parameters, then try to learn the manifold
-of optimal hyper-parameters.
-
-+ Mini-batch size.
-
-FUTURE POSSIBILITIES: CO might do a Nesterov experiment?  SoftPlus.
-
-XXX --- adaptive hyper-parameters?  Annealing?  Etc.
-
-Q: Should we introduce some notion of local variance / local
-dependence on variation of parameters?  Chris: Hold the initialization
-and ordering of data constant, and try the 40 x 4 experiments for a
-ReLU subexperiment --- do we see the same ``splotchiness''?
-
-\subsection*{Bevelled Rectified Linear Units}
-
-As part of our investigations we were led to introduce a new type of
-activation function for an artificial neuron.  As seen above, this
-activation function performed extremely well, and so it seems to be of
-some independent interest to record here the heuristic considerations
-which led to this activation function.
-
-What's a good neural activation function look like?  Well,
-heuristically you'd think it might ahve these properties: XXX.  Why
-the conventional functions fail.  Recent work on ReLU in particular.
-Potential shortcomings of ReLU.  We tried the following: BReLU.  As
-we'll see below, we get surprisingly good results that seem to avoid
-some of the problems with ReLU. (Mention Softplus with a citation).
-Future work: XXX.  Of course, this isn't an actual argument, but it
-does suggest that future investigations in this line may be
-profitable.
-
 \subsection*{Conclusion}
-
-CHECK: PLoS One guidelines on conclusions.
 
 OBSERVATION / RELATION TO PRIOR WORK: Over the past few years there's
 been a lot of work using GPUs [refs] and cluster s[ refs] to train
 neural networks.  Most of this work has focused on training larger and
 deeper networks, for more epochs than before, to get superior
-performance.  Our work demonstrates a dual strategy: instead of using
-the increased comp power to train one or a few very large networks, we
-use it to train very large numbers of relatively simple networks.  We
-believe this dual strategy can be important to
+performance.  Our work demonstrates a complementary strategy: instead
+of using the increased computational power to train one or a few very
+large networks, we use it to train very large numbers of relatively
+simple networks.  We believe this dual strategy can be important to
 
 + LImit of the technique: These are only preliminary results.  Really
 you want a much more comprehensive investigation.  It is even
@@ -842,12 +806,55 @@ lots of heuristics, and lots of failed heuristics that seem plausile
 (but with disproofs).  Supprting evidence: lots and lots of videos.
 Hundreds / thousands.
 
++ Sample the space of hyper-parameters, then try to learn the manifold
+of optimal hyper-parameters.
+
 + THe lower dimensional manifold: the parameters which are optimal in
 hyperparameter space.
 
 
-Glorot, Bngio et al: They found ReLU worked better than softplus in
-deep networks.  How to reconcile with our results?
+(Note: In some sense, it's 2+1 dimension, because we're actually
+looking over training time.  We do Not look to saturate, i.e., to
+get to optimal performance.  So the results are more about how quickly
+we're learning, not asymptotic capacity.  Add a caveat: in fact,
+almost noone ever does this.  One of the lessons of recent work is
+that there's much more benefit to going to long training times than
+people previously thought, with a suitable schedule of annealing.)
+
+
+% NOTES FOR FUTURE PROBLEMS
+%
+% Nesterov.  Annealing.  Adaptive hyper-parameters.
+
+
++ ??? To talk about: low-dimensional ``optimal'' manifold in
+hyperparameter space.  Bengio's ICML2011 for algorithms on tuning
+hyperparameters.
+
++ Obviously 3d versions... hard to computationally.
+
+
+NOTES FOR THIS PAPER
+
+XXX --- a general note: what the hell are we actually doing?  These
+are NOT experiments to confirm particular hypotheses.  The point of
+the paper is to demonstrate a TECHNIQUE by which hypotheses may be
+generated, and also by which hypotheses may be ruled out.  Of course,
+the technique could be applied to test and establish such hypotheses,
+although it would require substantially more computing power than we
+presently have access too.  In the meantime, the results from
+application of the technique seem sufficiently striking as to make
+them worth knowing widely.
+
+XXX --- We need to make the last point really strongly.  It should be
+in the intro, and perhaps reiterated a couple of times later in the
+paper.  The last para should be inserted somewehre in the intro.
+
+
+Q: Should we introduce some notion of local variance / local
+dependence on variation of parameters?  Chris: Hold the initialization
+and ordering of data constant, and try the 40 x 4 experiments for a
+ReLU subexperiment --- do we see the same ``splotchiness''?
 
 % Do NOT remove this, even if you are not including acknowledgments
 \section*{Acknowledgments}
