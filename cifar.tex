@@ -485,7 +485,7 @@ the experiments achieved a cost below $0.05$.
 \includegraphics[width=4in]{plots/detailed/LF-20a10a-20T10-MNIST-3-percent.eps}
 \end{center}
 \caption{ {\bf The fraction of hyper-parameters achieving a cost below
-    a given cost threshold.}}
+    a given cost threshold. Data shown are for MNIST.}}
 \label{fig:fraction}
 \end{figure}
 
@@ -506,7 +506,8 @@ The results above suggest a number of observations:
 
 \textbf{Observation 1:} For near-optimal costs, softplus (XXX) has
 many more good hyper-parameters in the momentum-learning rate space
-than there are for other activation functions.
+than there are for other activation functions.  For practical
+purposes, softplus seems to be a pretty good choice.
 
 \textbf{Observation 2:} ReLU's best-case performance is better than
 the tanh and sigmoid, and generally comparable to softplus, with the
@@ -528,8 +529,35 @@ paper XXX).  However, so far as we know this has not been
 quantitatively studied.  If the informal observation is borne out then
 it would be interesting to understand the reasons for this difference.
 
-\textbf{Observation 4:} This is really a collection of closely-related
+\textbf{Observation 4:} 
+
+
+A priori, the set of hyper-parameter values that result in the best
+cost, or very near to the best cost, could take any number of shapes,
+possibly quite complicated. We find, however, that the best results
+form a smooth, simple curve in hyper-parameter space.  Surprisingly,
+the qualitative, log-like shape of this curve is consistent across
+examples.
+
+In particular, the curve of good results can be interpreted as a
+function mapping choices of momentum coefficient to good choices of
+learning rate. Provided one uses this good choice of learning rate,
+the cost resulting from training is essentially invariant to choice of
+momentum coefficient.
+
+Cost seems to be a very simple valley-like function of learning rate
+and momentum coefficient. Cost gets lower as one gets closer to this
+optimal curve. With some minor reparameterization, it would be convex,
+modulo some noise. Handily, if one fixes momentum coefficient, it
+appears to be a convex function of learning rate.
+
+
+This is really a collection of closely-related
 observations about the...
+
+
+C.f.  Simard 2003, who also found little advantage in momentum-based
+approaches. XXX
 
 Consider again one of our earlier plots... XXX... Removing all the
 structure from it we obtain... XXX.  Suppose we fix a given value of
@@ -555,73 +583,130 @@ hyper-parameters have a very complex shape: XXX.  This has several
 nice consequences.  First, cost is relatively insensitive to the
 choice of momentum.  For practical purposes, setting momentum at 0 and
 usually regular gradient descent seems to work about as well as with
-the optimal value of momen tum.
+the optimal value of momentum.
 
-
-Of course, our data does not in any sense confirm that these
-observations hold generally, since the data used to suggest a
-hypothesis cannot also be used to confirm it!  However, it does
-suggest investigating these observations
-
-
-
-CIFAR:
-
-Note that the CIFAR results were only obtained for the net
-architecture using 20 hidden units.
-
-Note also that we weren't verifying a hypothesis.
+%
+% CIFAR:
+%
+Our results up to now have been for the MNIST data set.  Let's switch
+to describing the analogous results for the CIFAR-10 data set.  Note
+that the CIFAR-10 results were only obtained for network architectures
+using 20 hidden units, due to the higher computational cost of running
+networks for CIFAR-10.  The graph in Figure~\ref{fig:cifar_basic}
+shows the behaviour of 1,600 ReLU-based neural networks when trained
+on the CIFAR-10 data for six epochs. These correspond to 40 choices of
+the learning rate and 40 choices of the momentum coefficient, for a
+total of 1,600 = 40 $\times$ 40 networks.  The momentum range is
+chosen in the same way as for MNIST, uniformly over the range 0.0 to
+1.0.  The learning rate is chosen logarithmically, as for MNIST, but
+over a different range, from 0.1 to 0.000001, as this was better
+adapted to the CIFAR-10 data.
 
 \begin{figure}[!ht]
 \begin{center}
 \includegraphics[width=4in]{plots/detailed/LF-20R10R-20T10-CIFAR-3.eps}
 \end{center}
-\caption{
-{\bf Bold the first sentence.}  Rest of figure 2  caption.  Caption 
-should be left justified, as specified by the options to the caption 
-package.
-}
-\label{Figure_label}
+\caption{ {\bf The behaviour of 1,600 neural networks when trained on
+    the CIFAR-10 data for six (XXX) epochs.} XXX - regenerated, get
+  axes labels etc all consistent with CIFAR graph, and make sure that
+  ranges are well chosen.}
+\label{fig:cifar_basic}
 \end{figure}
 
-\begin{tabular}{|c|c|c|c|}
+The following table (XXX) summarizes our CIFAR-10 results for all
+activation functions.  Note that unlike MNIST there is now just a
+single architecture.  The color scheme for cost and the axes are the
+same as in the previous graph, but left unlabeled to avoid clutter.
+
+\begin{tabular}{|c|c|}
         \hline
-        & & {\LARGE cost} & \\
-        & & (CIFAR-10) & \\
-        & & (negative log-likelihood) & \\
-        & & (20-10-softmax) & \\
+        & {\LARGE cost} \\
+        & (CIFAR-10) \\
+        & (negative log-likelihood) \\
         \hline
-         & 1 epoch & 2 epochs & 3 epochs\\ \hline
 sigmoid 
-        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-1.eps}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-2.eps}
         & \includegraphics[scale=0.25]{plots/simple/LF-20S10S-20T10-CIFAR-3.eps} \\ \hline
 tanh 
-        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-1.eps}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-2.eps}
         & \includegraphics[scale=0.25]{plots/simple/LF-20T10T-20T10-CIFAR-3.eps} \\ \hline
 ReLU 
-        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-1.eps}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-2.eps}
         & \includegraphics[scale=0.25]{plots/simple/LF-20R10R-20T10-CIFAR-3.eps} \\ \hline
-BReLU 
-        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-1.eps}
-        & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-2.eps}
+BReLU XXX
         & \includegraphics[scale=0.25]{plots/simple/LF-20BR10BR-20T10-CIFAR-3.eps} \\ \hline
 \end{tabular}
 
+As for MNIST, we can summarize these results in the visualization
+shown in Figure~\label{fig:fraction_CIFAR}: (XXX - replot this without
+BReLu, fix labels, do at epoch 6, use fraction not percent, change
+``cost'' to ``cost threshold'') As before, this graph shows the
+fraction of hyper-parameters that achieve a cost below a given cost
+threshold, plotted for several different activation functions.
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=4in]{plots/detailed/LF-20a10a-40T10-CIFAR-3-percent.eps}
+\end{center}
+\caption{ {\bf The fraction of hyper-parameters achieving a cost below
+    a given cost threshold.  Data shown are for CIFAR-10.}}
+\label{fig:fraction_CIFAR}
+\end{figure}
 
 
-Q: Should we introduce some notion of local variance / local
-dependence on variation of parameters?  Chris: Hold the initialization
-and ordering of data constant, and try the 40 x 4 experiments for a
-ReLU subexperiment --- do we see the same ``splotchiness''?
+All the observations we made earlier for MNIST also hold for the
+CIFAR-10 results.  However, this cannot be considered independent
+confirmation of the validity of the observations, since the CIFAR-10
+data was generated at the same time as the MNIST data, before we made
+the observations.  However, it does suggest investigating these
+observations more generally to determine the limits of their
+applicability.
 
-``For practical purposes, BReLU is likely to be a good choice.''
-Caveats.
+ZZZ
 
-Momentum-based gradient descent isn't that interesting.  Cite the
-Simard 2003 results, who also found this.
+
+XXX - moives?
+
+XXX - observation 4.
+
+
+2. Initialization of weights.
+
+Architecture: 20 HU.
+
+Activation functions: ReLU, sigmoid, tanh, TODO BReLU.
+
+Training data: CIFAR.
+
+Results: 2 types of movie. 
+
+Claim: sigmoid is almost insensitive to initialization.
+
+Claim: ReLU cares a lot about init.  THe product of the SDs matters a
+lot.  ANd it's stochastic.
+
+
+
+
+3. Learning rate 1 versus learning rate 2.
+
+Architecture: 20 HU, 40 HU, 40+20 HU (fixed learning rate in final
+layer).
+
+Activation functions: sigmoid, ReLU, tanh, BReLU.
+
+Training data: CIFAR.
+
+Claim: Best rates not on diagonal.
+
+
+4. Number of HU (single layer) versus size of training data
+
+Architecture: single layer, + softmax.
+
+Activation: sigmoid.
+
+Training data: MNIST.
+
+
+CLaim: Surprising how little data, or how littl HU are required.
 
 
 
@@ -671,47 +756,6 @@ different cost functions.
 
 
 
-
-2. Initialization of weights.
-
-Architecture: 20 HU.
-
-Activation functions: ReLU, sigmoid, tanh, TODO BReLU.
-
-Training data: CIFAR.
-
-Results: 2 types of movie. 
-
-Claim: sigmoid is almost insensitive to initialization.
-
-Claim: ReLU cares a lot about init.  THe product of the SDs matters a
-lot.  ANd it's stochastic.
-
-
-
-
-3. Learning rate 1 versus learning rate 2.
-
-Architecture: 20 HU, 40 HU, 40+20 HU (fixed learning rate in final
-layer).
-
-Activation functions: sigmoid, ReLU, tanh, BReLU.
-
-Training data: CIFAR.
-
-Claim: Best rates not on diagonal.
-
-
-4. Number of HU (single layer) versus size of training data
-
-Architecture: single layer, + softmax.
-
-Activation: sigmoid.
-
-Training data: MNIST.
-
-
-CLaim: Surprising how little data, or how littl HU are required.
 
 
 
@@ -767,6 +811,11 @@ of optimal hyper-parameters.
 FUTURE POSSIBILITIES: CO might do a Nesterov experiment?  SoftPlus.
 
 XXX --- adaptive hyper-parameters?  Annealing?  Etc.
+
+Q: Should we introduce some notion of local variance / local
+dependence on variation of parameters?  Chris: Hold the initialization
+and ordering of data constant, and try the 40 x 4 experiments for a
+ReLU subexperiment --- do we see the same ``splotchiness''?
 
 \subsection*{Bevelled Rectified Linear Units}
 
