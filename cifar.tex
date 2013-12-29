@@ -193,9 +193,9 @@ already conveys the general flavour.
 There's a kind of folk wisdom of artificial neural networks --- a
 collection of commonly-used heuristics that experts use to set
 hyper-parameters.  Such heuristics have been collected in volumes such
-as XXX (NNTOTD I, and II), as well as in many individual papers.
-These heuristics have led to many successes, and often really do
-improve neural network performance.
+as~\cite{Montavon2012a}, as well as in many individual papers.  These
+heuristics have led to many successes, and often really do improve
+neural network performance.
 
 %
 % What can go wrong as a result
@@ -466,8 +466,8 @@ XXX softplus
 
 As before, all these graphs visualize cost after 6 epochs of
 training. Animated versions of these graphs, showing how cost changes
-over training, are provided in the supplementary material as Videos
-S1-S12, along with the code that generates the videos.
+over training, are provided in the Supporting Information as Videos
+S1--S12, along with the code that generates the videos.
 
 We can summarize these results in another visualization, shown in
 Figure~\label{fig:fraction}: (XXX - replot this without BReLu, fix
@@ -482,7 +482,7 @@ the experiments achieved a cost below $0.05$.
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=4in]{plots/detailed/LF-20a10a-20T10-MNIST-3-percent.eps}
+% XXX \includegraphics[width=4in]{plots/detailed/LF-20a10a-20T10-MNIST-3-percent.eps}
 \end{center}
 \caption{ {\bf The fraction of hyper-parameters achieving a cost below
     a given cost threshold. Data shown are for MNIST.}}
@@ -504,23 +504,19 @@ the different activation functions.
 
 The results above suggest a number of observations:
 
-\textbf{Observation 1:} For near-optimal costs, softplus (XXX) has
-many more good hyper-parameters in the momentum-learning rate space
-than there are for other activation functions.  For practical
+\textbf{Observation 1: softplus offers a good combination of
+  performance and robustness:} For near-optimal costs, softplus (XXX)
+has many more good hyper-parameters in the momentum-learning rate
+space than there are for other activation functions.  For practical
 purposes, softplus seems to be a pretty good choice.
 
-\textbf{Observation 2:} ReLU's best-case performance is better than
-the tanh and sigmoid, and generally comparable to softplus, with the
-better performance depending on the details of the architecture.  Our
-results on softplus (XXX) suggest that some ReLUs are becoming
-inactive (and thus stopping learning), which can be avoided with
-softplus.
-
-\textbf{Observation 3:} ReLUs have substantially more stochastic
-behaviour.  They provide good best-case performance, but are sensitive
-to small perturbations.  By contrast all our other activation
-functions are much smoother.  This makes it easier to find relatively
-stable solutions that won't just fall apart.  
+\textbf{Observation 2: ReLUs have good performance, but suffer from
+  unstable behaviour compared to softplus:} ReLUs have substantially
+more stochastic behaviour.  They provide good best-case performance,
+often comparable to softplus and better than sigmoid are tanh.  But
+they are sensitive to small perturbations.  By contrast all our other
+activation functions are much smoother.  This makes it easier to find
+relatively stable solutions that won't just fall apart.
 
 Informally, people who work with large, deep ReLU-based convolutional
 neural networks do not report this kind of instability (cite
@@ -529,61 +525,44 @@ paper XXX).  However, so far as we know this has not been
 quantitatively studied.  If the informal observation is borne out then
 it would be interesting to understand the reasons for this difference.
 
-\textbf{Observation 4:} 
-
-
-A priori, the set of hyper-parameter values that result in the best
+\textbf{Observation 3: the momentum-learning rate tradeoff:} \emph{A
+  priori}, the set of hyper-parameter values that result in the best
 cost, or very near to the best cost, could take any number of shapes,
-possibly quite complicated. We find, however, that the best results
-form a smooth, simple curve in hyper-parameter space.  Surprisingly,
-the qualitative, log-like shape of this curve is consistent across
-examples.
+possibly quite complicated. For example, the near-optimal cost region
+could be centred at a single point,
+%
+\begin{center}
+\includegraphics[width=4in]{plots/detailed/OptimalPretend1.eps}
+\end{center}
+%
+or perhaps in multiple disconnected regions,
+%
+\begin{center}
+\includegraphics[width=4in]{plots/detailed/OptimalPretend2.eps}
+\end{center}
+%
+We find, however, that the best results form a smooth, simple curve in
+hyper-parameter space.  Surprisingly, the qualitative, log-like shape
+of this curve is consistent across all examples, looking roughly like: 
+%
+\\
+%
 
-In particular, the curve of good results can be interpreted as a
-function mapping choices of momentum coefficient to good choices of
-learning rate. Provided one uses this good choice of learning rate,
-the cost resulting from training is essentially invariant to choice of
-momentum coefficient.
+As a consequence the curve of near-optimal results can be interpreted
+as a function mapping choices of momentum coefficient to good choices
+of learning rate. Provided one uses this good choice of learning rate,
+the cost resulting from training has little dependence on the choice
+of momentum coefficient.  This is quite remarkable, and means that for
+practical purposes setting momentum at 0 and using regular gradient
+descent works about as well as attempting to optimize the value of
+momentum.  (C.f. Simard \emph{et al}~\cite{Simard2003a}, who also
+found little advantage in momentum-based approaches.)
 
-Cost seems to be a very simple valley-like function of learning rate
-and momentum coefficient. Cost gets lower as one gets closer to this
-optimal curve. With some minor reparameterization, it would be convex,
-modulo some noise. Handily, if one fixes momentum coefficient, it
-appears to be a convex function of learning rate.
-
-
-This is really a collection of closely-related
-observations about the...
-
-
-C.f.  Simard 2003, who also found little advantage in momentum-based
-approaches. XXX
-
-Consider again one of our earlier plots... XXX... Removing all the
-structure from it we obtain... XXX.  Suppose we fix a given value of
-momentum.  Then at what value or values of the learning rate do we
-obtain the optimal cost?  A prior it seems possible that there might
-be many possible values: XXX.  There might be regions, or even
-multiple regions: XXX.  Our data suggest that in fact the cost is a
-convex function of the learning rate, and that there is a single value
-for the optimal learning rate.  Now, we can repeat this process for
-other values of momentum, and, again, we find a single optimal value
-for the corresponding learning rate.  So we can actually plot a graph
-showing the optimal learning rate for each different momentum: XXX.
-The shape of this graph is roughly the same for all activation
-functions and architectures. qWhat is truly remarkable, however, is
-that it seems that the optimal value for the cost is very nearly
-independent of the value of the momentum.  To put it another way, if
-we consider the values of (learning rate, momentum) which come near to
-optimizing the cost, then they are approximated by a one-dimensional
-curve: XXX.  The shape of this curve varies from thing to thing, but
-is broadly consistent.  A priori, of course, this need not have been
-the case.  It is perfectly possible that this near-optimizing set of
-hyper-parameters have a very complex shape: XXX.  This has several
-nice consequences.  First, cost is relatively insensitive to the
-choice of momentum.  For practical purposes, setting momentum at 0 and
-usually regular gradient descent seems to work about as well as with
-the optimal value of momentum.
+Summing up, we find that cost is a very simple valley-like function of
+learning rate and momentum coefficient. Cost gets lower as one gets
+closer to the optimal curve. With some minor reparameterization, it
+would be convex, modulo some noise. Handily, if one fixes momentum
+coefficient, it appears to be a convex function of learning rate.
 
 %
 % CIFAR:
@@ -643,13 +622,17 @@ threshold, plotted for several different activation functions.
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=4in]{plots/detailed/LF-20a10a-40T10-CIFAR-3-percent.eps}
+%\includegraphics[width=4in]{plots/detailed/LF-20a10a-40T10-CIFAR-3-percent.eps}
 \end{center}
 \caption{ {\bf The fraction of hyper-parameters achieving a cost below
     a given cost threshold.  Data shown are for CIFAR-10.}}
 \label{fig:fraction_CIFAR}
 \end{figure}
 
+XXX -- discuss results
+
+As for MNIST, videos showing the time evolution of all the graphs
+above are available in the Supporting Information, Videos S14--S17.
 
 All the observations we made earlier for MNIST also hold for the
 CIFAR-10 results.  However, this cannot be considered independent
@@ -661,8 +644,6 @@ applicability.
 
 ZZZ
 
-
-XXX - moives?
 
 XXX - observation 4.
 
